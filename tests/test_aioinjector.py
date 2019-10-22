@@ -27,8 +27,9 @@ def test_aioinjector_engine_instance_creation(aioinjector: AioInjector):
     loop.run_until_complete(aioinjector.create(Engine))
     engine = loop.run_until_complete(aioinjector.instance(Engine))
     engine.capacity = 150
-    assert loop.run_until_complete(
-        aioinjector.instance(Engine)).capacity == 150
+    if loop.run_until_complete(
+            aioinjector.instance(Engine)).capacity != 150:
+        raise AssertionError("Engine capacity must be 150.")
 
 
 def test_aioinjector_car_instance_creation(aioinjector: AioInjector):
@@ -38,9 +39,9 @@ def test_aioinjector_car_instance_creation(aioinjector: AioInjector):
         Car, engine=aioinjector.instance(Engine)))
     print("Car::::", vars(loop.run_until_complete(
         aioinjector.instance(Car))))
-    engine_capacity = loop.run_until_complete(loop.run_until_complete(
-        aioinjector.instance(Car)).engine).capacity
-    assert engine_capacity == 1000
+    if loop.run_until_complete(loop.run_until_complete(
+            aioinjector.instance(Car)).engine).capacity != 1000:
+        raise AssertionError("Engine capacity must be 1000.")
 
 # Testing with class declarative attributes
 
@@ -59,8 +60,9 @@ class Work():
 def test_aioinjector_employee_instance_creation(aioinjector: AioInjector):
     loop = asyncio.get_event_loop()
     loop.run_until_complete(aioinjector.create(Employee, name="John Smith"))
-    assert loop.run_until_complete(
-        aioinjector.instance(Employee)).name == "John Smith"
+    if loop.run_until_complete(
+            aioinjector.instance(Employee)).name != "John Smith":
+        raise AssertionError("Employee name must be John Smith.")
 
 
 def test_aioinjector_work_instance_creation(aioinjector: AioInjector):
@@ -69,6 +71,6 @@ def test_aioinjector_work_instance_creation(aioinjector: AioInjector):
     loop = asyncio.get_event_loop()
     loop.run_until_complete(aioinjector.create(
         Work, place="Michigan", employees=[john_smith, mike_summer]))
-    employees_number = len(loop.run_until_complete(
-        aioinjector.instance(Work)).employees)
-    assert employees_number == 2
+    if len(loop.run_until_complete(
+            aioinjector.instance(Work)).employees) != 2:
+        raise AssertionError("Work must have 2 employees.")
