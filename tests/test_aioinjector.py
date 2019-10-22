@@ -38,8 +38,9 @@ def test_aioinjector_car_instance_creation(aioinjector: AioInjector):
         Car, engine=aioinjector.instance(Engine)))
     print("Car::::", vars(loop.run_until_complete(
         aioinjector.instance(Car))))
-    assert loop.run_until_complete(loop.run_until_complete(
-        aioinjector.instance(Car)).engine).capacity == 1000
+    engine_capacity = loop.run_until_complete(loop.run_until_complete(
+        aioinjector.instance(Car)).engine).capacity
+    assert engine_capacity == 1000
 
 # Testing with class declarative attributes
 
@@ -68,5 +69,6 @@ def test_aioinjector_work_instance_creation(aioinjector: AioInjector):
     loop = asyncio.get_event_loop()
     loop.run_until_complete(aioinjector.create(
         Work, place="Michigan", employees=[john_smith, mike_summer]))
-    assert len(loop.run_until_complete(
-        aioinjector.instance(Work)).employees) == 2
+    employees_number = len(loop.run_until_complete(
+        aioinjector.instance(Work)).employees)
+    assert employees_number == 2
