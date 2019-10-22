@@ -38,7 +38,8 @@ class Employee():
 
 
 class Work():
-    def __init__(self, employees: List[Employee]):
+    def __init__(self, place: str, employees: List[Employee]):
+        self.place: str = place
         self.employees: List[Employee] = employees
 
 
@@ -50,5 +51,6 @@ def test_aioinjector_employee_instance_creation(aioinjector: AioInjector):
 def test_aioinjector_work_instance_creation(aioinjector: AioInjector):
     john_smith = Employee("John Smith")
     mike_summer = Employee("Mike Summer")
-    aioinjector.create(Work, employees=[john_smith, mike_summer])
+    aioinjector.create(
+        Work, place="Michigan", employees=[john_smith, mike_summer])
     assert len(aioinjector.instance(Work).employees) == 2
