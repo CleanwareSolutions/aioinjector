@@ -9,11 +9,7 @@ class AioInjector:
         self.instances: Dict[str, T] = {}
 
     def create(self, cls: T, **dependencies) -> T:
-        self.instances[cls.__name__] = cls(**dependencies)
-        # if len(dependencies) > 0:
-        #     self.instances[cls.__name__] = cls(**dependencies)
-        # else:
-        #     self.instances[cls.__name__] = cls()
+        self.instances[f"{cls.__name__},{cls.__name__}"] = cls(**dependencies)
 
     def instance(self, cls: T) -> T:
-        return self.instances[cls.__name__]
+        return self.instances[f"{cls.__name__},{cls.__name__}"]
