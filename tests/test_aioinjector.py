@@ -1,6 +1,12 @@
+import asyncio
 from typing import List
 from pytest import fixture
 from aioinjector.aioinjector import AioInjector
+
+
+@fixture
+def aioinjector() -> AioInjector:
+    return AioInjector()
 
 
 # Testing with kwargs throw class
@@ -17,17 +23,23 @@ class Car():
 
 
 def test_aioinjector_engine_instance_creation(aioinjector: AioInjector):
-    aioinjector.create(Engine)
-    engine = aioinjector.instance(Engine)
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(aioinjector.create(Engine))
+    engine = loop.run_until_complete(aioinjector.instance(Engine))
     engine.capacity = 150
-    assert aioinjector.instance(Engine).capacity == 150
+    assert loop.run_until_complete(
+        aioinjector.instance(Engine)).capacity == 150
 
 
 def test_aioinjector_car_instance_creation(aioinjector: AioInjector):
-    aioinjector.create(Engine)
-    aioinjector.create(Car, engine=aioinjector.instance(Engine))
-    assert aioinjector.instance(Car).engine.capacity == 1000
-
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(aioinjector.create(Engine))
+    loop.run_until_complete(aioinjector.create(
+        Car, engine=aioinjector.instance(Engine)))
+    print("Car::::", vars(loop.run_until_complete(
+        aioinjector.instance(Car))))
+    assert loop.run_until_complete(loop.run_until_complete(
+        aioinjector.instance(Car)).engine).capacity == 1000
 
 # Testing with class declarative attributes
 
@@ -44,13 +56,17 @@ class Work():
 
 
 def test_aioinjector_employee_instance_creation(aioinjector: AioInjector):
-    aioinjector.create(Employee, name="John Smith")
-    assert aioinjector.instance(Employee).name == "John Smith"
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(aioinjector.create(Employee, name="John Smith"))
+    assert loop.run_until_complete(
+        aioinjector.instance(Employee)).name == "John Smith"
 
 
 def test_aioinjector_work_instance_creation(aioinjector: AioInjector):
     john_smith = Employee("John Smith")
     mike_summer = Employee("Mike Summer")
-    aioinjector.create(
-        Work, place="Michigan", employees=[john_smith, mike_summer])
-    assert len(aioinjector.instance(Work).employees) == 2
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(aioinjector.create(
+        Work, place="Michigan", employees=[john_smith, mike_summer]))
+    assert len(loop.run_until_complete(
+        aioinjector.instance(Work)).employees) == 2
