@@ -3,4 +3,4 @@
   services:
   - aioinjector-build
   steps:
-  - command: python-codacy-coverage -r coverage.xml
+  - command: python-codacy-coverage -r /opt/aioinjector/coverage.xml
