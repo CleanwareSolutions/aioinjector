@@ -23,3 +23,6 @@ coverage-deep:
 update:
 	pip-review --auto
 	pip freeze > requirements.txt
+
+encrypt-env-variables:
+	jet encrypt .env .env.encrypted
