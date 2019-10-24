@@ -8,7 +8,7 @@ class AioInjector:
         self.instances: Dict[str, T] = {}
 
     async def create(self, cls: T, **dependencies) -> T:
-        self.instances[f"{cls.__name__},{cls.__name__}"] = cls(**dependencies)
+        self.instances[f"{cls.__module__},{cls.__name__}"] = cls(**dependencies)
 
     async def instance(self, cls: T) -> T:
-        return self.instances[f"{cls.__name__},{cls.__name__}"]
+        return self.instances[f"{cls.__module__},{cls.__name__}"]

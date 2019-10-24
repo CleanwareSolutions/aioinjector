@@ -37,8 +37,6 @@ def test_aioinjector_car_instance_creation(aioinjector: AioInjector):
     loop.run_until_complete(aioinjector.create(Engine))
     loop.run_until_complete(aioinjector.create(
         Car, engine=aioinjector.instance(Engine)))
-    print("Car::::", vars(loop.run_until_complete(
-        aioinjector.instance(Car))))
     if loop.run_until_complete(loop.run_until_complete(
             aioinjector.instance(Car)).engine).capacity != 1000:
         raise AssertionError("Engine capacity must be 1000.")
