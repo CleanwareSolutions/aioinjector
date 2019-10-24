@@ -1,6 +1,6 @@
 cv-build:
     build:
-        image: aioinjector-image
+        image: aioinjector
         dockerfile: Dockerfile
     encrypted_env_file:
         - env.encrypted
