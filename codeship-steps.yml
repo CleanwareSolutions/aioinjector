@@ -1,6 +1,6 @@
 - type: parallel
   tag: master
   services:
-  - aioinjector
+  - aioinjector-build
   steps:
   - command: python-codacy-coverage -r coverage.xml
